@@ -27,9 +27,7 @@ def search(request):
     if title in entries:
         return HttpResponseRedirect(reverse("entry_page", kwargs={"title": title}))
 
-    not_found = """
-    <h1>Search results</h1>
-    <p>//TODO</p>"""
+    results = util.partial_search(title, entries)
 
     return render(request, "encyclopedia/search_results.html",
-                  {"title": title, "content": not_found})
+                  {"title": title, "content": results})

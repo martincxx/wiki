@@ -3,5 +3,14 @@
     Search results for {{ title }}
 {% endblock %}
 {% block body %}
-    {{ content|safe }}
+<p>You searched for <span>{{ title }}</span>.</p>
+<ul>
+    {% for entry in  content%}
+    <li>
+        <a href="{% url 'entry_page' entry %}">{{ entry }}</a>
+    </li>
+    {% empty %}
+    <li> There are no results for your search. Try typing more letters. Or what about creating an entry for that term?</li>
+    {% endfor %}
+</ul>
 {% endblock %}
