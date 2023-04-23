@@ -35,3 +35,18 @@ def get_entry(title):
         return f.read().decode("utf-8")
     except FileNotFoundError:
         return None
+
+
+def partial_search(title, entries):
+    """
+    Retrieves a list of entries containing the text. If that search 
+    does not match any  of the entries it returns an empty list
+    """
+    if len(title) < 1:
+        raise ValueError("You're searching for an empty string.")
+    found = []
+    title = title.lower()
+    for entry in entries:
+        if title in entry.lower():
+            found += [entry]
+    return found
