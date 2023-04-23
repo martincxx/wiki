@@ -3,6 +3,13 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 import markdown2
 from . import util
+from django import forms
+
+
+class NewEntryForm(forms.Form):
+    title = forms.CharField(max_length=10, required=True, label="Title")
+    new_entry = forms.CharField(
+        max_length=500, required=True, label="New Entry")
 
 
 def index(request):
@@ -31,3 +38,13 @@ def search(request):
 
     return render(request, "encyclopedia/search_results.html",
                   {"title": title, "content": results})
+
+
+def new(request):
+    if request.method == "POST":
+        form = NewEntryForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["entry"]
+            if content:
+                util.save_entry(title, content)
