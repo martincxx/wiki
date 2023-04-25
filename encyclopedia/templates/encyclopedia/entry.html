@@ -4,4 +4,7 @@
 {% endblock %}
 {% block body %}
 {{ content|safe }}
+<form action="{% url 'edit' request.title={{ title }}%}" method="POST">
+    <input type="submit" value="Edit">
+</form>
 {% endblock %}
