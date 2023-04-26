@@ -1,9 +1,9 @@
 {% extends "encyclopedia/layout.html" %}
 {% block title %}
-    Editing <span>{{ title }}</span>:
+    Wikipedia - Editing {{ form.title.value }}
 {% endblock %}
 {% block body %}
-    <h1>Editing {{ title }}</h1>
+    <h1>Editing {{ form.title.value }}</h1>
     <form action="{% url 'save' %}" method="POST">
         {% csrf_token %}
         {{ form }}
