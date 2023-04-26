@@ -5,9 +5,9 @@
 {% block body %}
 {{ content|safe }}
 
-{% comment %}
-    <form action="{% url 'edit' request.title={{ title }}%}" method="GET">
-        <input type="submit" value="Edit">
+
+    <form action="{% url 'edit' %}" method="GET">
+        <button type="submit" value="{{ title }}" name="edit">Edit {{ title}}</button>
     </form>
     
-{% endcomment %}{% endblock %}
+{% endblock %}

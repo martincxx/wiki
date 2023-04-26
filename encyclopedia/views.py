@@ -64,13 +64,25 @@ def new(request):
 
 def edit(request):
     if request.method == "GET":
-        form = EntryForm(request.GET)
-        form
-    pass
-    # TODO
+        title = request.GET.get("edit", None)
+        current_content = util.get_entry(title)
+        form = EntryForm({"title": title, "new_entry": current_content})
+        return render(request, "encyclopedia/edit_page.html", {"form": form})
+
+
+def save_entry(request):
+    if request.method == "POST":
+        form = EntryForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["new_entry"]
+            util.save_entry(title, content)
+            return HttpResponseRedirect(reverse("entry_page", kwargs={"title": title}))
 
 
 def random_entry(request):
-    all_entries = util.list_entries()
-    random_title = all_entries.__getitem__(randint(0, len(all_entries) - 1))
-    return HttpResponseRedirect(reverse("entry_page", kwargs={"title": random_title}))
+    if request.method == "GET":
+        all_entries = util.list_entries()
+        random_title = all_entries.__getitem__(
+            randint(0, len(all_entries) - 1))
+        return HttpResponseRedirect(reverse("entry_page", kwargs={"title": random_title}))
