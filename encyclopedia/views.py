@@ -5,6 +5,7 @@ import markdown2
 from . import util
 from django import forms
 from django.contrib import messages
+from random import randint
 
 
 class EntryForm(forms.Form):
@@ -65,3 +66,11 @@ def edit(request):
     if request.method == "GET":
         form = EntryForm(request.GET)
         form
+    pass
+    # TODO
+
+
+def random_entry(request):
+    all_entries = util.list_entries()
+    random_title = all_entries.__getitem__(randint(0, len(all_entries) - 1))
+    return HttpResponseRedirect(reverse("entry_page", kwargs={"title": random_title}))
