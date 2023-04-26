@@ -7,7 +7,7 @@ from django import forms
 from django.contrib import messages
 
 
-class NewEntryForm(forms.Form):
+class EntryForm(forms.Form):
     title = forms.CharField(max_length=10, required=True, label="Title")
     new_entry = forms.CharField(
         widget=forms.Textarea(attrs={"rows": "10"}), required=True, label="New Entry")
@@ -21,7 +21,7 @@ def index(request):
 
 def entry_page(request, title):
     entry = util.get_entry(title)
-    if (entry == None):
+    if (entry is None):
         title += " - not found!"
         html_content = "404 - Not found!"
     else:
@@ -45,7 +45,7 @@ def new(request):
     title, content = None, None
 
     if request.method == "POST":
-        form = NewEntryForm(request.POST)
+        form = EntryForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data["title"]
             content = form.cleaned_data["new_entry"]
@@ -53,9 +53,15 @@ def new(request):
                 util.save_entry(title, content)
                 return HttpResponseRedirect(reverse("entry_page", kwargs={"title": title}))
             else:
-                messages.error(request, "That entry already exists!")
-                return render(request, "encyclopedia/new_page.html")
+                messages.info(request, "That entry already exists!")
+                return render(request, "encyclopedia/new_page.html", {"form": EntryForm()})
 
     return render(request, "encyclopedia/new_page.html", {
-        "form": NewEntryForm()
+        "form": EntryForm()
     })
+
+
+def edit(request):
+    if request.method == "GET":
+        form = EntryForm(request.GET)
+        form
