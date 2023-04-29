@@ -19,9 +19,15 @@ class EditEntryForm(forms.Form):
         widget=forms.Textarea(attrs={"rows": "10"}), required=True, label="Content")
 
 
+class SearchForm(forms.Form):
+    q = forms.CharField(label="", widget=forms.TextInput(
+        attrs={'placeholder': "Search Encyclopedia",
+               "class": "search"}))
+
+
 def index(request):
     return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries()
+        "entries": util.list_entries(), "search_form": SearchForm()
     })
 
 
@@ -32,7 +38,7 @@ def entry_page(request, title):
         html_content = "404 - Not found!"
     else:
         html_content = markdown2.markdown(entry)
-    return render(request, "encyclopedia/entry.html", {"title": title, "content": html_content})
+    return render(request, "encyclopedia/entry.html", {"title": title, "content": html_content, "search_form": SearchForm()})
 
 
 def search(request):
@@ -44,7 +50,10 @@ def search(request):
     results = util.partial_search(title, entries)
 
     return render(request, "encyclopedia/search_results.html",
-                  {"title": title, "content": results})
+                  {"title": title,
+                   "content": results,
+                   "search_form": SearchForm()
+                   })
 
 
 def new(request):
@@ -60,10 +69,11 @@ def new(request):
                 return HttpResponseRedirect(reverse("entry_page", kwargs={"title": title}))
             else:
                 messages.info(request, "That entry already exists!")
-                return render(request, "encyclopedia/new_page.html", {"form": NewEntryForm()})
+                return render(request, "encyclopedia/new_page.html", {"form": NewEntryForm(), "search_form": SearchForm()})
 
     return render(request, "encyclopedia/new_page.html", {
-        "form": NewEntryForm()
+        "form": NewEntryForm(),
+        "search_form": SearchForm()
     })
 
 
@@ -74,7 +84,8 @@ def edit(request):
         form = EditEntryForm({"content": current_content})
         return render(request, "encyclopedia/edit_page.html", {
             "title": title,
-            "form": form})
+            "form": form,
+            "search_form": SearchForm()})
 
 
 def save_entry(request):
