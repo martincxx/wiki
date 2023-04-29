@@ -9,19 +9,20 @@ from random import randint
 
 
 class NewEntryForm(forms.Form):
-    title = forms.CharField(max_length=10, required=True, label="Title")
+    title = forms.CharField(max_length=10, required=True, label="Title", widget=forms.TextInput(
+        attrs={'class': "text-form"}))
     content = forms.CharField(
-        widget=forms.Textarea(attrs={"rows": "10"}), required=True, label="New Entry")
+        widget=forms.Textarea(attrs={"rows": "10", "class": "text-form"}), required=True, label="New Entry")
 
 
 class EditEntryForm(forms.Form):
     content = forms.CharField(
-        widget=forms.Textarea(attrs={"rows": "10"}), required=True, label="Content")
+        widget=forms.Textarea(attrs={"rows": "10", "class": "text-form"}), required=True, label="Content")
 
 
 class SearchForm(forms.Form):
     q = forms.CharField(label="", widget=forms.TextInput(
-        attrs={'placeholder': "Search Encyclopedia",
+        attrs={"placeholder": "Search Encyclopedia",
                "class": "search"}))
 
 

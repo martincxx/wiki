@@ -3,7 +3,7 @@
     Wikipedia - Editing {{ title }}
 {% endblock %}
 {% block body %}
-    <h1>Editing entry: {{ title }}</h1>
+    <h1>Editing entry: <span>{{ title }} </span></h1>
     <form action="{% url 'save' %}" method="POST">
         {% csrf_token %}
         {{ form }}
