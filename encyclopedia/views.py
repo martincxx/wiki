@@ -6,6 +6,7 @@ from . import util
 from django import forms
 from django.contrib import messages
 from random import randint
+from django.template import RequestContext
 
 
 class NewEntryForm(forms.Form):
@@ -64,7 +65,7 @@ def new(request):
         form = NewEntryForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data["title"]
-            content = form.cleaned_data["new_entry"]
+            content = form.cleaned_data["content"]
             if title not in util.list_entries():
                 util.save_entry(title, content)
                 return HttpResponseRedirect(reverse("entry_page", kwargs={"title": title}))
@@ -91,12 +92,18 @@ def edit(request):
 
 def save_entry(request):
     if request.method == "POST":
-        form = NewEntryForm(request.POST)
+        form = EditEntryForm(request.POST)
+        title = request.POST.get("edit-entry", None)
         if form.is_valid():
-            title = form.cleaned_data["title"]
-            content = form.cleaned_data["new_entry"]
+            content = form.cleaned_data["content"]
             util.save_entry(title, content)
             return HttpResponseRedirect(reverse("entry_page", kwargs={"title": title}))
+        else:
+            messages.info(request, "Something failed!")
+            return render(request, "encyclopedia/edit_page.html", {
+                "title": title,
+                "form": form,
+                "search_form": SearchForm()})
 
 
 def random_entry(request):
