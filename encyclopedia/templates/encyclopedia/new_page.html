@@ -8,10 +8,12 @@
         {% csrf_token %}
         {{ form }}
         <div class="actions">
-            <a href="{% url 'index' %}"><button type="button">Cancel</button></a>
-        </div>
-        <div class="actions">
-            <input type="submit">
+            <div>
+                <a href="{% url 'index' %}"><button type="button">Cancel</button></a>
+            </div>
+            <div>
+                <input type="submit">
+            </div>
         </div>
     </form>
     {% if messages %}

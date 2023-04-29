@@ -3,15 +3,18 @@
     Wikipedia - Editing {{ title }}
 {% endblock %}
 {% block body %}
-    <h1>Editing {{ title }}</h1>
+    <h1>Editing entry: {{ title }}</h1>
     <form action="{% url 'save' %}" method="POST">
         {% csrf_token %}
         {{ form }}
         <div class="actions">
-            <a href="{% url 'entry_page' title %}"><button type="button">Cancel</button></a>
-        </div>
-        <div class="actions">
-            <input type="submit">
+            <div>
+                <a href="{% url 'entry_page' title %}"><button type="button">Cancel</button></a>
+            </div>
+            <div>
+                <input type="submit">
+            </div>
+            
         </div>
     </form>
     {% if messages %}

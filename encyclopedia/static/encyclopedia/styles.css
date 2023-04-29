@@ -13,7 +13,7 @@ h1 {
 }
 
 textarea {
-  height: 90vh;
+  height: 70vh;
   width: 80%;
 }
 
@@ -41,4 +41,23 @@ span {
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   font-style: italic;
   color: crimson;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 210px;
+}
+
+.actions div {
+  margin: 10px;
+}
+
+label {
+  display: block;
+  width: 100px;
+}
+
+form {
+  margin-left: 10px;
 }
