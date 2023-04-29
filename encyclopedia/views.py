@@ -8,10 +8,15 @@ from django.contrib import messages
 from random import randint
 
 
-class EntryForm(forms.Form):
+class NewEntryForm(forms.Form):
     title = forms.CharField(max_length=10, required=True, label="Title")
-    new_entry = forms.CharField(
+    content = forms.CharField(
         widget=forms.Textarea(attrs={"rows": "10"}), required=True, label="New Entry")
+
+
+class EditEntryForm(forms.Form):
+    content = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": "10"}), required=True, label="Content")
 
 
 def index(request):
@@ -46,7 +51,7 @@ def new(request):
     title, content = None, None
 
     if request.method == "POST":
-        form = EntryForm(request.POST)
+        form = NewEntryForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data["title"]
             content = form.cleaned_data["new_entry"]
@@ -55,10 +60,10 @@ def new(request):
                 return HttpResponseRedirect(reverse("entry_page", kwargs={"title": title}))
             else:
                 messages.info(request, "That entry already exists!")
-                return render(request, "encyclopedia/new_page.html", {"form": EntryForm()})
+                return render(request, "encyclopedia/new_page.html", {"form": NewEntryForm()})
 
     return render(request, "encyclopedia/new_page.html", {
-        "form": EntryForm()
+        "form": NewEntryForm()
     })
 
 
@@ -66,13 +71,15 @@ def edit(request):
     if request.method == "GET":
         title = request.GET.get("edit", None)
         current_content = util.get_entry(title)
-        form = EntryForm({"title": title, "new_entry": current_content})
-        return render(request, "encyclopedia/edit_page.html", {"form": form})
+        form = EditEntryForm({"content": current_content})
+        return render(request, "encyclopedia/edit_page.html", {
+            "title": title,
+            "form": form})
 
 
 def save_entry(request):
     if request.method == "POST":
-        form = EntryForm(request.POST)
+        form = NewEntryForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data["title"]
             content = form.cleaned_data["new_entry"]
